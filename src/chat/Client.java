@@ -16,12 +16,28 @@ import java.util.Scanner;
  *
  * @author student
  */
-public class Client {
+public class Client implements Runnable{
+        static Socket s = null; 
+        static DataOutputStream out = null;
+        static DataInputStream in = null;
+        static Scanner keyin = null;
+        static String name = "";
+    @Override
+    public void run() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            String response; 
+            while((response = in.readLine()) != null){
+                System.out.println("\n"+response);
+                System.out.print(name+": ");
+            }
+        }catch(IOException e){
+            System.out.println(e);
+        }
+    }
+    
     public static void main (String[] args){
-        Socket s = null; 
-        DataOutputStream out = null;
-        DataInputStream in = null;
-        Scanner keyin = null;
+        
         try{
             s = new Socket("127.0.0.1", 8080);
             out = new DataOutputStream(s.getOutputStream());
@@ -34,17 +50,15 @@ public class Client {
         if (s != null && in != null && out != null && keyin != null) {
             try{
                 System.out.print("Enter name for client: ");
-                String name = keyin.nextLine();
-                System.out.println(name);
+                name = keyin.nextLine();
+                //System.out.println(name);
                 //System.out.println("sent");
+                Thread t = new Thread(new Client());
+                t.start();
                 while(true){
-                    String response;
-                    while((response = in.readLine()) != null)
-                        System.out.println(response);
-                    
                     System.out.print(name+": ");
                     String line = keyin.nextLine();
-                    
+
                     if(line.equals("exit")){
                         out.close();
                         in.close(); 
@@ -62,4 +76,6 @@ public class Client {
         }
         
     }
+
+    
 }

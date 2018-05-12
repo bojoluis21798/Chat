@@ -11,18 +11,37 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author student
  */
-public class Server {
+public class Server implements Runnable{
+    static ServerSocket echoServer = null;
+    static DataInputStream is;
+    static PrintStream os;
+    static Socket clientSocket = null;
+    static Scanner keyin = null;
+    static String name = "";
+    
+    @Override
+    public void run() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String response;
+        try {
+            while((response = is.readUTF()) != null){
+                System.out.println("\n"+response);
+                System.out.print(name+": ");
+            }
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+    }
+    
     public static void main (String[] args){
-        ServerSocket echoServer = null;
-        DataInputStream is;
-        PrintStream os;
-        Socket clientSocket = null;
-        Scanner keyin = null;
+        
         try {
            echoServer = new ServerSocket(8080);
            
@@ -32,12 +51,13 @@ public class Server {
            keyin = new Scanner(System.in);
            
            System.out.print("Enter name of server: ");
-           String name = keyin.nextLine();
-           
+           name = keyin.nextLine();
+           Thread t = new Thread(new Server());
+           t.start();
            while(true){
-               System.out.print(name+": ");
+                System.out.print(name+": ");
                 String line = keyin.nextLine();
-                    
+
                 if(line.equals("exit")){
                     os.close();
                     is.close(); 
@@ -46,9 +66,7 @@ public class Server {
                 }
 
                 os.println(name+": "+line);
-                String response;
-                while((response = is.readLine()) != null)
-                    System.out.println(response);
+                
             } 
            
         }catch (IOException e) {
