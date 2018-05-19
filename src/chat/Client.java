@@ -17,11 +17,11 @@ import java.util.Scanner;
  * @author student
  */
 public class Client implements Runnable{
-        static Socket s = null; 
-        static DataOutputStream out = null;
-        static DataInputStream in = null;
-        static Scanner keyin = null;
-        static String name = "";
+        private static Socket s = null; 
+        private static DataOutputStream out = null;
+        private static DataInputStream in = null;
+        private static Scanner keyin = null;
+        private static String name = "";
     @Override
     public void run() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -36,7 +36,7 @@ public class Client implements Runnable{
         }
     }
     
-    public static void main (String[] args){
+    public void start (){
         
         try{
             s = new Socket("127.0.0.1", 8080);

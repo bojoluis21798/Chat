@@ -40,7 +40,7 @@ public class Server implements Runnable{
         }
     }
     
-    public static void main (String[] args){
+    public void start (){
         
         try {
            echoServer = new ServerSocket(8080);
