@@ -5,11 +5,13 @@
  */
 package chat;
 
+import app.Main;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +26,7 @@ public class Server implements Runnable{
     static PrintStream os;
     static Socket clientSocket = null;
     static Scanner keyin = null;
-    static String name = "";
+    public String name = "";
     
     @Override
     public void run() {
@@ -32,46 +34,50 @@ public class Server implements Runnable{
         String response;
         try {
             while((response = is.readUTF()) != null){
-                System.out.println("\n"+response);
-                System.out.print(name+": ");
+                Main.appendMessage(response);
             }
         } catch (IOException ex) {
             System.out.println(ex);
         }
     }
     
-    public void start (){
-        
-        try {
-           echoServer = new ServerSocket(8080);
-           
-           clientSocket = echoServer.accept();
-           is = new DataInputStream(clientSocket.getInputStream());
-           os = new PrintStream(clientSocket.getOutputStream());
-           keyin = new Scanner(System.in);
-           
-           System.out.print("Enter name of server: ");
-           name = keyin.nextLine();
-           Thread t = new Thread(new Server());
-           t.start();
-           while(true){
-                System.out.print(name+": ");
-                String line = keyin.nextLine();
+    
+    public void setName(String name){
+        this.name = name;
+    }
+    
+    public String getName(){
+        return this.name;
+    }
+    
+    public void sendMessage(String line){
+        try{
+            if(line.equals("exit")){
+                os.close();
+                is.close(); 
+                echoServer.close();
+            }
 
-                if(line.equals("exit")){
-                    os.close();
-                    is.close(); 
-                    echoServer.close();
-                    break;
-                }
-
-                os.println(name+": "+line);
+            os.println(name+": "+line);
                 
-            } 
-           
-        }catch (IOException e) {
-           System.out.println(e);
+        }catch(IOException e){
+            System.out.println(e);
         }
+    }
+    
+    public void start (){
+        try{
+            echoServer = new ServerSocket(8080);
+            System.out.println("HERE");
+            clientSocket = echoServer.accept();
+            System.out.println("HERE2");
+            is = new DataInputStream(clientSocket.getInputStream());
+            os = new PrintStream(clientSocket.getOutputStream());
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+        Thread t = new Thread(this);
+        t.start();               
     }
 }
 

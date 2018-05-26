@@ -5,6 +5,7 @@
  */
 package chat;
 
+import app.Main;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,63 +18,67 @@ import java.util.Scanner;
  * @author student
  */
 public class Client implements Runnable{
-        private static Socket s = null; 
-        private static DataOutputStream out = null;
-        private static DataInputStream in = null;
-        private static Scanner keyin = null;
-        private static String name = "";
+    private Socket s = null; 
+    private DataOutputStream out = null;
+    private DataInputStream in = null;
+    private Scanner keyin = null;
+    private String name = "";
+
+    public Client(){
+        
+    }
+    
     @Override
     public void run() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         try{
             String response; 
             while((response = in.readLine()) != null){
-                System.out.println("\n"+response);
-                System.out.print(name+": ");
+                Main.appendMessage(response);
             }
         }catch(IOException e){
             System.out.println(e);
         }
     }
     
-    public void start (){
-        
-        try{
-            s = new Socket("127.0.0.1", 8080);
-            out = new DataOutputStream(s.getOutputStream());
-            in = new DataInputStream(s.getInputStream());
-            keyin = new Scanner(System.in);
-        }catch(IOException e){
-            System.out.println(e);
-        }
-        
-        if (s != null && in != null && out != null && keyin != null) {
-            try{
-                System.out.print("Enter name for client: ");
-                name = keyin.nextLine();
-                //System.out.println(name);
-                //System.out.println("sent");
-                Thread t = new Thread(new Client());
-                t.start();
-                while(true){
-                    System.out.print(name+": ");
-                    String line = keyin.nextLine();
-
-                    if(line.equals("exit")){
+    public void setName(String name){
+        this.name = name;
+    }
+    
+    public String getName(){
+        return this.name;
+    }
+    
+    public void sendMessage(String line){
+        try {
+            if(line.equals("exit")){
                         out.close();
                         in.close(); 
                         s.close();
-                        break;
-                    }
-                    out.writeUTF(name+": "+line);
-                }
-            
-            }catch(UnknownHostException e){
-                System.out.println(e);
-            }catch(IOException e){
-                System.out.println(e);
             }
+            out.writeUTF(name+": "+line);
+        }catch(IOException e){
+            System.out.println(e);
         }
+    }
+    
+    public void start (){
+       
+                try{
+                    System.out.println("Here");
+                    this.s = new Socket("localhost", 8080);
+                    this.out = new DataOutputStream(this.s.getOutputStream());
+                    this.in = new DataInputStream(this.s.getInputStream());
+                    //this.keyin = new Scanner(System.in);
+                }catch(IOException e){
+                    System.out.println(e);
+                }
+
+                //System.out.println(name);
+                //System.out.println("sent");
+                Thread t = new Thread(this);
+                t.start();
+       
         
     }
 

@@ -3,9 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/student/Documents/NetBeansProjects/Chat/src/chat/Server.java</file>
-            <file>file:/C:/Users/student/Documents/NetBeansProjects/Chat/src/ChatWindow.java</file>
-            <file>file:/C:/Users/student/Documents/NetBeansProjects/Chat/src/chat/Client.java</file>
+            <file>file:/C:/Users/Bojo%20Alcisto/Desktop/Chat/src/app/Main.java</file>
+            <file>file:/C:/Users/Bojo%20Alcisto/Desktop/Chat/src/app/ChatWindow.java</file>
+            <file>file:/C:/Users/Bojo%20Alcisto/Desktop/Chat/src/app/EnterName.java</file>
+            <file>file:/C:/Users/Bojo%20Alcisto/Desktop/Chat/src/chat/Server.java</file>
+            <file>file:/C:/Users/Bojo%20Alcisto/Desktop/Chat/src/chat/Client.java</file>
         </group>
     </open-files>
 </project-private>
